@@ -13,10 +13,10 @@ docker build -t pandrugs .
 
 This will take some time because the image will retrieve big files from internet (databases).
 
-## Running the server
+## Starting the server
 
 ```
-docker run -v [your_local_dir_for_data]:/pandrugsdb-backend_data --p 80:8080 pandrugs
+docker run -d -v [your_local_dir_for_data]:/pandrugsdb-backend_data -p 80:8080 pandrugs
 ```
 This will make your server available via the port 80 at the container machine.
 
@@ -47,5 +47,15 @@ da903ab4c25d    pandrugs:latest     "/run.sh"   31 minutes ago  Up 31 minutes   
 docker exec -it da903ab4c25d tail -f /pandrugsdb.log
 ```
 
+## Stopping the server
+Take the running instance ID
+
+```
+docker ps
+CONTAINER ID    IMAGE   COMMAND    CREATED      STATUS                          PORTS                   NAMES
+da903ab4c25d    pandrugs:latest     "/run.sh"   31 minutes ago  Up 31 minutes   0.0.0.0:8080->8080/tcp  jovial_hawking
+
+docker stop da903ab4c25d
+```
 
 
