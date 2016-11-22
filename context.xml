@@ -1,0 +1,74 @@
+<!--
+#%L
+PanDrugsDB Backend
+%%
+Copyright (C) 2015 Fátima Al-Shahrour, Elena Piñeiro, Daniel Glez-Peña and Miguel Reboiro-Jato
+%%
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public
+License along with this program.  If not, see
+<http://www.gnu.org/licenses/gpl-3.0.html>.
+#L%
+-->
+<Context>
+	<Resource name="mail/session"
+		   auth="Container"
+		   type="javax.mail.Session"
+		   mail.smtp.host="sing.ei.uvigo.es"
+		   mail.smtp.port="25"
+		   mail.smtp.auth="false"
+		   />
+	
+	<Resource name="jdbc/pandrugsdb/database"
+		   auth="Container"
+		   type="javax.sql.DataSource"
+		   factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+		   initialSize="5"
+		   maxActive="55"
+		   maxIdle="21"
+		   minIdle="13"
+		   timeBetweenEvictionRunsMillis="34000"
+		   minEvictableIdleTimeMillis="55000"
+		   validationQuery="SELECT 1"
+		   validationInterval="34"
+		   testOnBorrow="true"
+		   removeAbandoned="true"
+		   removeAbandonedTimeout="233"
+		   username="pandrugsdb"
+		   password="pandrugsdb"
+		   driverClassName="com.mysql.jdbc.Driver"
+		   url="jdbc:mysql://localhost:3306/pandrugsdb?allowMultiQueries=true"
+		   />
+	
+	<Realm className="org.apache.catalina.realm.LockOutRealm">
+		<Realm resourceName="PanDrugsDBRealm" 
+		 className="org.apache.catalina.realm.DataSourceRealm"
+		 dataSourceName="jdbc/pandrugsdb/database"
+		 userTable="user"
+		 userNameCol="login"
+		 userCredCol="password"
+		 userRoleTable="user"
+		 roleNameCol="role"
+		 digest="MD5"
+		 localDataSource="true"
+		 />
+		</Realm>
+		
+		<Parameter name="user.data.directory" value="/tmp" override = "false"/>
+		
+		<Parameter name="vep.command.template" value="perl /ensembl-tools-release-85/scripts/variant_effect_predictor/variant_effect_predictor.pl --format vcf --sift b --polyphen b --ccds --uniprot --hgvs --symbol --numbers --domains --regulatory --canonical --protein --biotype --uniprot --tsl --gmaf --variant_class --xref_refseq --maf_1kg --maf_esp --maf_exac --dir /ensembl-tools-release-85/scripts/variant_effect_predictor/.vep  --config /ensembl-tools-release-85/scripts/variant_effect_predictor/registry.local --plugin Condel,/ensembl-tools-release-85/scripts/variant_effect_predictor/.vep/Plugins/config/Condel/config,b  --fork 8 --offline  --force_overwrite --vcf --no_progress  --buffer_size 5  -i %1$s  --output_file %2$s" override = "false"/>
+		
+		<Parameter name="veptovscore.command.template" value="perl /vep-parser/VEP_parser_v15.pl -f=%1$s -o=%2$s -sp=%3$s -r=%3$s -p=cancer -tc=%3$s -c=no -v=FALSE -t=BOTH -d=/vep-parser/databases_Apr_2016/" override = "false" />
+		
+		
+	</Context>
+	
