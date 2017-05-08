@@ -16,6 +16,7 @@ ENV DATA_DIR /${APP_NAME}_data
 ENV MYSQL_CONNECTOR_J_URL http://central.maven.org/maven2/mysql/mysql-connector-java/5.1.21/mysql-connector-java-5.1.21.jar
 ENV MAIL_API_URL http://central.maven.org/maven2/com/sun/mail/javax.mail/1.5.2/javax.mail-1.5.2.jar
 ENV ACTIVATION_URL http://central.maven.org/maven2/javax/activation/activation/1.1.1/activation-1.1.1.jar
+ENV TOMCAT_AJAX_VALVE https://maven.sing-group.org/repository/maven-releases/org/sing_group/tomcat-ajax-authenticate/1.0/tomcat-ajax-authenticate-1.0.jar
 #################################################
 
 ## PANDRUGS APP CONFIGS ##
@@ -52,6 +53,7 @@ RUN apt-get install -y wget unzip \
 	&& tar xzvf /opt/tomcat.tar.gz --strip-components=1 -C /opt/tomcat \
 	&& rm /opt/tomcat.tar.gz \
 	&& wget $MYSQL_CONNECTOR_J_URL -O /opt/tomcat/lib/mysq-connector.jar && wget $MAIL_API_URL -O /opt/tomcat/lib/mail-api.jar && wget $ACTIVATION_URL -O /opt/tomcat/lib/activation.jar \
+        && wget $TOMCAT_AJAX_VALVE -O /opt/tomcat/lib/tomcat-ajax-authenticate.jar
 	&& apt-get remove --purge -y wget unzip && apt-get clean
 
 # Variant analysis databases and vep-parser
