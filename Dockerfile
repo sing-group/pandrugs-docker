@@ -7,8 +7,7 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get install -y supervisor openjdk-8-jdk-headless mysql-server libdbi-perl libwww-perl libarchive-extract-perl libclone-perl
 
 ## CONFIGURATION OF TOMCAT+MYSQL FRAMEWORK #####
-ENV APP_NAME pandrugsdb-backend
-ENV APP_GIT_URL http://192.168.110.54/gitlab/pandrugsdb/pandrugsdb-backend.git
+ENV APP_NAME pandrugs-backend
 ENV DB_NAME pandrugsdb
 ENV DB_USER pandrugsdb
 ENV DB_PASS pandrugsdb
@@ -20,10 +19,12 @@ ENV TOMCAT_AJAX_VALVE https://maven.sing-group.org/repository/maven-releases/org
 #################################################
 
 ## PANDRUGS APP CONFIGS ##
-ENV PANDRUGS_FRONTEND_URL http://sing.citi.uvigo.es/static/pandrugs/pandrugsdb-frontend.zip
-ENV PANDRUGS_ENSEMBL_85_TOOLS_URL http://sing.citi.uvigo.es/static/pandrugs/pandrugsdb-variantanalysis-data/ensembl-tools-release-85.zip
-ENV VEP_PARSER_V15_URL http://sing.citi.uvigo.es/static/pandrugs/pandrugsdb-variantanalysis-data/vep-parser-v15.zip
-ENV PANDRUGSDB_SQL_URL http://sing.citi.uvigo.es/static/pandrugs/pandrugsdb.sql.gz
+ENV PANDRUGS_BACKEND_URL https://maven.sing-group.org/repository/maven-releases/es/uvigo/ei/sing/pandrugs-backend/1.0.6/pandrugs-backend-1.0.6.war
+ENV PANDRUGS_FRONTEND_URL http://static.sing-group.org/pandrugs/pandrugs-frontend-1.0.2.tar.gz
+ENV PANDRUGS_VEP_URL http://static.sing-group.org/pandrugs/pandrugsdb-variantanalysis-data/vep90.zip
+ENV VEP_PARSER_URL http://static.sing-group.org/pandrugs/pandrugsdb-variantanalysis-data/vep-parser-v19.zip
+ENV VEP_PARSER_MAIN_SCRIPT VEP_parser_v19_PD.pl
+ENV PANDRUGSDB_SQL_URL http://static.sing-group.org/pandrugs/pandrugsdb-dump-20180223.sql.gz
 ##########################
 
 
@@ -37,12 +38,10 @@ ADD supervisord-tomcat.conf /etc/supervisor/conf.d/supervisord-tomcat.conf
 ADD mysql-setup.sh /mysql-setup.sh
 
 # Tomcat
-ENV TOMCAT_MAJOR 8
-ENV TOMCAT_VERSION 8.0.39
-ENV TOMCAT_TGZ_URL https://www.apache.org/dyn/closer.cgi?action=download&filename=tomcat/tomcat-$TOMCAT_MAJOR/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz
+ENV TOMCAT_TGZ_URL https://archive.apache.org/dist/tomcat/tomcat-8/v8.0.39/bin/apache-tomcat-8.0.39.tar.gz 
 
 # Install base software
-RUN apt-get install -y wget unzip \
+RUN apt-get update && apt-get install -y wget unzip \
 	&& chmod 755 /*.sh \
 	&& mkdir -p ${DATA_DIR}/database \
 	&& sed /etc/mysql/mysql.conf.d/mysqld.cnf -i -e 's#/var/lib/mysql#'"${DATA_DIR}"'/database#g' \
@@ -52,34 +51,33 @@ RUN apt-get install -y wget unzip \
 	&& mkdir /opt/tomcat \
 	&& tar xzvf /opt/tomcat.tar.gz --strip-components=1 -C /opt/tomcat \
 	&& rm /opt/tomcat.tar.gz \
-	&& wget $MYSQL_CONNECTOR_J_URL -O /opt/tomcat/lib/mysq-connector.jar && wget $MAIL_API_URL -O /opt/tomcat/lib/mail-api.jar && wget $ACTIVATION_URL -O /opt/tomcat/lib/activation.jar \
-        && wget $TOMCAT_AJAX_VALVE -O /opt/tomcat/lib/tomcat-ajax-authenticate.jar
+	&& wget $MYSQL_CONNECTOR_J_URL -O /opt/tomcat/lib/mysql-connector.jar && wget $MAIL_API_URL -O /opt/tomcat/lib/mail-api.jar && wget $ACTIVATION_URL -O /opt/tomcat/lib/activation.jar \
+        && wget $TOMCAT_AJAX_VALVE -O /opt/tomcat/lib/tomcat-ajax-authenticate.jar \
 	&& apt-get remove --purge -y wget unzip && apt-get clean
 
 # Variant analysis databases and vep-parser
-RUN apt-get install -y wget unzip \
-	&& mkdir /vep-parser && wget $VEP_PARSER_V15_URL -O vep-parser.zip \ 
-	&& unzip vep-parser.zip -d /vep-parser \ 
+RUN apt-get update && apt-get install -y wget unzip \
+	&& mkdir /vep-parser && wget $VEP_PARSER_URL -O vep-parser.zip \
+	&& unzip vep-parser.zip -d /vep-parser \
 	&& rm vep-parser.zip \
-	&& sed /vep-parser/VEP_parser_v15.pl -i -e 's#use lib.*#use lib "/vep-parser/modules";#g' \
+	&& sed /vep-parser/$VEP_PARSER_MAIN_SCRIPT -i -e 's#use lib.*#use lib "/vep-parser/modules";#g' \
 	&& apt-get remove --purge -y wget unzip && apt-get clean
 
-RUN apt-get install -y wget unzip \
-	&& wget $PANDRUGS_ENSEMBL_85_TOOLS_URL -O ensembl-85.zip \
-	&& unzip ensembl-85.zip \
-	&& rm ensembl-85.zip \
+RUN apt-get update && apt-get install -y wget unzip \
+	&& wget $PANDRUGS_VEP_URL -O vep.zip \
+	&& unzip vep.zip -d /vep \
+	&& rm vep.zip \
 	&& apt-get remove --purge -y wget unzip && apt-get clean
 
 
-# Build App
-RUN apt-get install -y wget unzip git maven \
-	&& git clone $APP_GIT_URL \
-	&& cd $APP_NAME && git checkout develop && mvn -DskipTests=true package && mv target/${APP_NAME}.war /opt/tomcat/webapps \
+# Install App
+RUN apt-get update && apt-get install -y wget unzip \
+    && wget $PANDRUGS_BACKEND_URL -O /opt/tomcat/webapps/${APP_NAME}.war \
 	&& unzip /opt/tomcat/webapps/${APP_NAME}.war -d /opt/tomcat/webapps/${APP_NAME} && rm /opt/tomcat/webapps/${APP_NAME}.war \
-	&& wget $PANDRUGS_FRONTEND_URL -O pandrugs-frontend.zip \
-	&& unzip pandrugs-frontend.zip -d /opt/tomcat/webapps/pandrugs \
-	&& rm pandrugs-frontend.zip \
-	&& apt-get remove --purge -y wget unzip git maven && rm -rf /${APP_NAME} && rm -rf /.m2 && apt-get clean
+	&& wget $PANDRUGS_FRONTEND_URL -O pandrugs-frontend.tar.gz \
+	&& mkdir /opt/tomcat/webapps/pandrugs && tar xzvf pandrugs-frontend.tar.gz -C /opt/tomcat/webapps/pandrugs \
+	&& rm pandrugs-frontend.tar.gz \
+	&& apt-get remove --purge -y wget unzip && apt-get clean
 
 ADD context.xml /opt/tomcat/webapps/${APP_NAME}/META-INF/context.xml
 RUN sed /opt/tomcat/webapps/${APP_NAME}/META-INF/context.xml -i -e 's#/tmp#'"${DATA_DIR}"'#g'

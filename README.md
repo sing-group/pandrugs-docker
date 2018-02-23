@@ -1,6 +1,13 @@
 # pandrugsdb-docker
 A Dockerfile to generate an all-in-one pandrugs server.
 
+## Versions of PanDrugs components included in this image
+
+* Front-end: 1.0.2
+* Back-end: 1.0.6
+* Perl variant analysis module: v18
+* Database: 20180222
+
 ## Building the image
 
 Edit the context.xml file in order to configure the mail system.
