@@ -8,6 +8,23 @@ A Dockerfile to generate an all-in-one pandrugs server.
 * Perl variant analysis module: v18
 * Database: 20180222
 
+## Versions of databases used by PanDrugs and included this image
+
+* DGIdb: v3.0.2
+* moAb (from [Carter PJ & Lazar GA. Next generation antibody drugs: pursuit of the 'high-hanging fruit'. Nat Rev Drug Discov. 2017 Dec 1](https://doi.org/10.1038/nrd.2017.227))
+* TARGET database: v3
+* CTRP: v1
+* GDSC Results of data analysis (from [A landscape of pharmacogenomic interactions in cancer, Iorio F et al. Cell. 2016](https://doi.org/10.1016/j.cell.2016.06.017))
+* Variant Effect Predictor Ensembl: Release 90
+* COSMIC: Release v84 for HG19 assembly
+* Pfam: 31.0
+* UniProt: Release 2018_02
+* InterPro: 66.0
+* ClinVar: Release 2018_02
+* Cancer Gene Census for Cosmic: v84
+* APPRIS: (gencode19/ensembl74)
+* KEGG: Release 85.1
+
 ## Building the image
 
 Edit the context.xml file in order to configure the mail system.
