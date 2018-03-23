@@ -66,6 +66,7 @@ RUN apt-get update && apt-get install -y wget unzip \
 RUN apt-get update && apt-get install -y wget unzip \
 	&& wget $PANDRUGS_VEP_URL -O vep.zip \
 	&& unzip vep.zip -d /vep \
+	&& sed /vep/.vep/Plugins/config/Condel/config/condel_SP.conf -i -e "s#condel\.dir.*#condel.dir='/vep/.vep/Plugins/config/Condel/'#g" \
 	&& rm vep.zip \
 	&& apt-get remove --purge -y wget unzip && apt-get clean
 
