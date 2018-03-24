@@ -27,7 +27,17 @@ A Dockerfile to generate an all-in-one pandrugs server.
 
 ## Building the image
 
-Edit the context.xml file in order to configure the mail system.
+Edit the context.xml file in order to configure the mail system (see [SMTP Configuration Properties](http://connector.sourceforge.net/doc-files/Properties.html) for configuration details).
+
+```
+<Resource name="mail/session"
+        auth="Container"
+        type="javax.mail.Session"
+        mail.smtp.host="sing.ei.uvigo.es"
+        mail.smtp.port="25"
+        mail.smtp.auth="false"
+/>
+```
 
 Inside the cloned repository:
 
@@ -40,7 +50,7 @@ This will take some time because the image will retrieve big files from internet
 ## Starting the server
 
 ```
-docker run -d -v [your_local_dir_for_data]:/pandrugsdb-backend_data -p 80:8080 pandrugs
+docker run -d -v [your_local_dir_for_data OR volume_name]:/pandrugs-backend_data -p 80:8080 pandrugs
 ```
 This will make your server available via the port 80 at the container machine.
 
