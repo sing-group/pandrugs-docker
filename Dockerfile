@@ -19,12 +19,12 @@ ENV TOMCAT_AJAX_VALVE https://maven.sing-group.org/repository/maven-releases/org
 #################################################
 
 ## PANDRUGS APP CONFIGS ##
-ENV PANDRUGS_BACKEND_URL https://maven.sing-group.org/repository/maven-releases/es/uvigo/ei/sing/pandrugs-backend/1.0.6/pandrugs-backend-1.0.6.war
-ENV PANDRUGS_FRONTEND_URL http://static.sing-group.org/pandrugs/pandrugs-frontend-1.0.2.tar.gz
+ENV PANDRUGS_BACKEND_URL https://maven.sing-group.org/repository/maven-snapshots/es/uvigo/ei/sing/pandrugs-backend/1.1.0-SNAPSHOT/pandrugs-backend-1.1.0-20180323.200839-9.war
+ENV PANDRUGS_FRONTEND_URL http://static.sing-group.org/pandrugs/pandrugs-frontend-1.1.0-alpha.35.tar.gz
 ENV PANDRUGS_VEP_URL http://static.sing-group.org/pandrugs/pandrugsdb-variantanalysis-data/vep90.zip
 ENV VEP_PARSER_URL http://static.sing-group.org/pandrugs/pandrugsdb-variantanalysis-data/vep-parser-v19.zip
 ENV VEP_PARSER_MAIN_SCRIPT VEP_parser_v19_PD.pl
-ENV PANDRUGSDB_SQL_URL http://static.sing-group.org/pandrugs/pandrugsdb-dump-20180223.sql.gz
+ENV PANDRUGSDB_SQL_URL http://static.sing-group.org/pandrugs/pandrugsdb-20180324.sql.gz
 ##########################
 
 
