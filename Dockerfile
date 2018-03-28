@@ -77,6 +77,7 @@ RUN apt-get update && apt-get install -y wget unzip \
 	&& unzip /opt/tomcat/webapps/${APP_NAME}.war -d /opt/tomcat/webapps/${APP_NAME} && rm /opt/tomcat/webapps/${APP_NAME}.war \
 	&& wget $PANDRUGS_FRONTEND_URL -O pandrugs-frontend.tar.gz \
 	&& mkdir /opt/tomcat/webapps/pandrugs && tar xzvf pandrugs-frontend.tar.gz -C /opt/tomcat/webapps/pandrugs \
+	&& mv /opt/tomcat/webapps/ROOT /opt/tomcat/webapps/ROOT.bak && ln -s /opt/tomcat/webapps/pandrugs /opt/tomcat/webapps/ROOT \
 	&& rm pandrugs-frontend.tar.gz \
 	&& apt-get remove --purge -y wget unzip && apt-get clean
 

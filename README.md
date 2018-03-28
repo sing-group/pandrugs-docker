@@ -55,9 +55,9 @@ docker run -d -v [your_local_dir_for_data OR volume_name]:/pandrugs-backend_data
 This will make your server available via the port 80 at the container machine.
 
 ## Accessing the server
-The frontend will be serving at: http://yourhost/pandrugs
+The frontend will be serving at: http://yourhost
 
-The backend will be serving at: http://yourhost/pandrugsdb-backend
+The backend will be serving at: http://yourhost/pandrugs-backend
 
 ## Accessing the database
 Take the running instance ID
