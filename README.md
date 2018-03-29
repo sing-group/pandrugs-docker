@@ -1,12 +1,15 @@
 # pandrugsdb-docker
+
+Version: 2018.03.28
+
 A Dockerfile to generate an all-in-one pandrugs server.
 
 ## Versions of PanDrugs components included in this image
 
-* Front-end: 1.1.0-alpha.35
-* Back-end: 1.1.0-20180323.200839-9
+* Front-end: 1.1.0
+* Back-end: 1.1.0
 * Perl variant analysis module: v19
-* Database: 20180324
+* Database: 20180328
 
 ## Versions of databases used by PanDrugs and included this image
 
