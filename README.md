@@ -1,6 +1,6 @@
 # pandrugsdb-docker
 
-Version: 2018.06.18
+Version: 2018.10.18
 
 A Dockerfile to generate an all-in-one pandrugs server.
 
