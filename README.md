@@ -6,7 +6,7 @@ A Dockerfile to generate an all-in-one pandrugs server.
 
 ## Versions of PanDrugs components included in this image
 
-* Front-end: 1.2.0
+* Front-end: 1.2.1
 * Back-end: 1.1.0
 * Perl variant analysis module: v19
 * Database: 20180328
