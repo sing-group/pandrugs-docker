@@ -1,19 +1,19 @@
 # pandrugsdb-docker
 
-Version: 2018.11.7
+Version: 2021.04.27
 
 A Dockerfile to generate an all-in-one pandrugs server.
 
 ## Versions of PanDrugs components included in this image
 
-* Front-end: 1.2.1
-* Back-end: 1.1.0
+* Front-end: 1.2.3
+* Back-end: 1.1.7
 * Perl variant analysis module: v19
-* Database: 20180328
+* Database: 20210427
 
 ## Versions of databases used by PanDrugs and included this image
 
-* DGIdb: v3.0.2
+* DGIdb: 2020-Feb
 * moAb (from [Carter PJ & Lazar GA. Next generation antibody drugs: pursuit of the 'high-hanging fruit'. Nat Rev Drug Discov. 2017 Dec 1](https://doi.org/10.1038/nrd.2017.227))
 * TARGET database: v3
 * CTRP: v1
@@ -26,7 +26,7 @@ A Dockerfile to generate an all-in-one pandrugs server.
 * ClinVar: Release 2018_02
 * Cancer Gene Census for Cosmic: v84
 * APPRIS: (gencode19/ensembl74)
-* KEGG: Release 85.1
+* KEGG: Release 93.0
 
 ## Building the image
 
