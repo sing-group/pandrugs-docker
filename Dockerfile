@@ -12,9 +12,9 @@ ENV DB_NAME pandrugsdb
 ENV DB_USER pandrugsdb
 ENV DB_PASS pandrugsdb
 ENV DATA_DIR /${APP_NAME}_data
-ENV MYSQL_CONNECTOR_J_URL http://central.maven.org/maven2/mysql/mysql-connector-java/5.1.21/mysql-connector-java-5.1.21.jar
-ENV MAIL_API_URL http://central.maven.org/maven2/com/sun/mail/javax.mail/1.5.2/javax.mail-1.5.2.jar
-ENV ACTIVATION_URL http://central.maven.org/maven2/javax/activation/activation/1.1.1/activation-1.1.1.jar
+ENV MYSQL_CONNECTOR_J_URL https://repo.maven.apache.org/maven2/mysql/mysql-connector-java/5.1.21/mysql-connector-java-5.1.21.jar
+ENV MAIL_API_URL https://repo.maven.apache.org/maven2/com/sun/mail/javax.mail/1.5.2/javax.mail-1.5.2.jar
+ENV ACTIVATION_URL https://repo.maven.apache.org/maven2/javax/activation/activation/1.1.1/activation-1.1.1.jar
 ENV TOMCAT_AJAX_VALVE https://maven.sing-group.org/repository/maven-releases/org/sing_group/tomcat-ajax-authenticate/1.0/tomcat-ajax-authenticate-1.0.jar
 #################################################
 
