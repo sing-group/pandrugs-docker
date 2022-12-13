@@ -14,6 +14,7 @@ if [[ ! -d $DATA_DIR/database/mysql ]]; then
     echo "=> Starting MySQL for initial setup..."
     mkdir -p /var/run/mysqld
     chown mysql:mysql /var/run/mysqld
+
     /usr/bin/mysqld_safe > /dev/null 2>&1 &
     RET=1
     while [[ RET -ne 0 ]]; do
