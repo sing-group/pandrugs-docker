@@ -4,6 +4,14 @@ if [[ ! -d $DATA_DIR/database ]]; then
     echo "=> No database dir found on $DATA_DIR, creating..."
     mkdir $DATA_DIR/database
 fi
+
+
+if [[ ! -d /var/run/mysqld ]]; then
+    echo "=> Creating /var/run/mysql..."
+    mkdir -p /var/run/mysqld
+    chown mysql:mysql /var/run/mysqld
+fi
+
 if [[ ! -d $DATA_DIR/database/mysql ]]; then
     echo "=> An empty or uninitialized MySQL data directory is detected in $DATA_DIR/database"
     echo "=> Installing MySQL ..."
@@ -12,9 +20,6 @@ if [[ ! -d $DATA_DIR/database/mysql ]]; then
     #/create_mysql_admin_user.sh
     
     echo "=> Starting MySQL for initial setup..."
-    mkdir -p /var/run/mysqld
-    chown mysql:mysql /var/run/mysqld
-
     /usr/bin/mysqld_safe > /dev/null 2>&1 &
     RET=1
     while [[ RET -ne 0 ]]; do
@@ -32,6 +37,8 @@ if [[ ! -d $DATA_DIR/database/mysql ]]; then
     echo "=> Done!"
 else
     echo "=> Using an existing data directory of MySQL"
+    # Ensures that MySQL is the owner of the database directory
+    chown -R mysql:mysql $DATA_DIR/database
 fi
 
 exec supervisord -n
