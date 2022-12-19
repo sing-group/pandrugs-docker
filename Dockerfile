@@ -6,7 +6,15 @@ ENV DEBIAN_FRONTEND noninteractive
 # Only permanent packages
 RUN apt-get update && apt-get install -y supervisor openjdk-8-jdk-headless mysql-server libdbi-perl libwww-perl libarchive-extract-perl libclone-perl
 
-## CONFIGURATION OF TOMCAT+MYSQL FRAMEWORK #####
+# Docker
+RUN apt-get update \
+	&& apt-get install -y apt-transport-https ca-certificates curl software-properties-common \
+	&& curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
+	&& add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" \
+	&& apt-get update \
+	&& apt-get install -y docker-ce
+
+## CONFIGURATION OF TOMCAT+MYSQL FRAMEWORK ###
 ENV APP_NAME pandrugs-backend
 ENV APP_BACKEND_VERSION 1.1.8
 ENV APP_FRONTEND_VERSION 1.2.3
@@ -21,7 +29,7 @@ ENV MYSQL_CONNECTOR_J_URL https://repo1.maven.org/maven2/mysql/mysql-connector-j
 ENV MAIL_API_URL https://repo1.maven.org/maven2/com/sun/mail/javax.mail/1.5.2/javax.mail-1.5.2.jar
 ENV ACTIVATION_URL https://repo1.maven.org/maven2/javax/activation/activation/1.1.1/activation-1.1.1.jar
 ENV TOMCAT_AJAX_VALVE https://maven.sing-group.org/repository/maven-releases/org/sing_group/tomcat-ajax-authenticate/1.1/tomcat-ajax-authenticate-1.1.jar
-#################################################
+###############################################
 
 ## PANDRUGS APP CONFIGS ##
 ENV PANDRUGS_BACKEND_URL https://static.sing-group.org/pandrugs/pandrugs-backend-${APP_BACKEND_VERSION}.war
@@ -31,6 +39,7 @@ ENV VEP_PARSER_URL https://static.sing-group.org/pandrugs/pandrugsdb-variantanal
 ENV VEP_PARSER_MAIN_SCRIPT VEP_parser_v19_PD.pl
 ENV PANDRUGSDB_SCHEMA_SQL_URL https://static.sing-group.org/pandrugs/pandrugsdb-schema-${APP_DB_SCHEMA_VERSION}.sql.gz
 ENV PANDRUGSDB_DATA_SQL_URL https://static.sing-group.org/pandrugs/pandrugsdb-noschema-${APP_DB_DATA_VERSION}.sql.gz
+ENV PANDRUGS_ADDITIONAL_SCRIPTS_URL http://static.sing-group.org/pandrugs/additional-scripts-1.0.0.zip
 ##########################
 
 # Tomcat
@@ -74,6 +83,7 @@ RUN apt-get update && apt-get install -y wget unzip \
 	&& rm /opt/tomcat.tar.gz \
 	&& wget $MYSQL_CONNECTOR_J_URL -O /opt/tomcat/lib/mysql-connector.jar && wget $MAIL_API_URL -O /opt/tomcat/lib/mail-api.jar && wget $ACTIVATION_URL -O /opt/tomcat/lib/activation.jar \
 	&& wget $TOMCAT_AJAX_VALVE -O /opt/tomcat/lib/tomcat-ajax-authenticate.jar \
+	&& echo 'export JAVA_OPTS="$JAVA_OPTS -Xss4M"' > /opt/tomcat/bin/setenv.sh \
 	&& apt-get remove --purge -y wget unzip && apt-get clean
 
 # Install app
@@ -85,7 +95,14 @@ RUN apt-get update && apt-get install -y wget unzip \
 	&& unzip /opt/tomcat/webapps/${APP_NAME}.war -d /opt/tomcat/webapps/${APP_NAME} \
 	&& mv /opt/tomcat/webapps/ROOT /opt/tomcat/webapps/ROOT.bak && ln -s /opt/tomcat/webapps/pandrugs /opt/tomcat/webapps/ROOT \
 	&& rm pandrugs-frontend.tar.gz \
-	&& rm /opt/tomcat/webapps/${APP_NAME}.war \
+	&& rm /opt/tomcat/webapps/${APP_NAME}.war
+
+# Additional bash scripts (PharmCAT and VCF preprocessing)
+RUN mkdir /pandrugs-additional-scripts \
+	&& wget $PANDRUGS_ADDITIONAL_SCRIPTS_URL -O pandrugs-additional-scripts.zip \
+	&& unzip pandrugs-additional-scripts.zip -d /pandrugs-additional-scripts \
+	&& rm pandrugs-additional-scripts.zip \
+	&& chmod 755 /pandrugs-additional-scripts/* \
 	&& apt-get remove --purge -y wget unzip && apt-get clean
 
 ADD context.xml /opt/tomcat/webapps/${APP_NAME}/META-INF/context.xml
@@ -94,7 +111,7 @@ RUN sed /opt/tomcat/webapps/${APP_NAME}/META-INF/context.xml -i -e 's#/tmp#'"${D
 # Run script
 ADD run.sh /run.sh
 
-# Add volumes 
+# Add volumes
 VOLUME $DATA_DIR
 
 EXPOSE 8080 3306

@@ -45,7 +45,7 @@ Edit the context.xml file in order to configure the mail system (see [SMTP Confi
 Inside the cloned repository:
 
 ```
-docker build -t pandrugs .
+docker build -t pandrugs2 .
 ```
 
 This will take some time because the image will retrieve big files from internet (databases).
@@ -53,46 +53,33 @@ This will take some time because the image will retrieve big files from internet
 ## Starting the server
 
 ```
-docker run -d -v [your_local_dir_for_data OR volume_name]:/pandrugs-backend_data -p 80:8080 pandrugs
+docker run -d -v /var/run/docker.sock:/var/run/docker.sock -v /tmp:/tmp -v [your_local_dir_for_data OR volume_name]:/pandrugs-backend_data -p 80:8080 --name pandrugs2 pandrugs2
 ```
-This will make your server available via the port 80 at the container machine.
+This command will:
+- Make your server available via the port 80 at the container machine.
+- Allow the container executing Docker.
+- Share the host `/tmp` directory with the container.
 
 ## Accessing the server
+
 The frontend will be serving at: http://yourhost
 
 The backend will be serving at: http://yourhost/pandrugs-backend
 
 ## Accessing the database
-Take the running instance ID
 
 ```
-docker ps
-CONTAINER ID    IMAGE   COMMAND    CREATED      STATUS                          PORTS                   NAMES
-da903ab4c25d    pandrugs:latest     "/run.sh"   31 minutes ago  Up 31 minutes   0.0.0.0:8080->8080/tcp  jovial_hawking
-
-docker exec -it da903ab4c25d /usr/bin/mysql -uroot
+docker exec -it pandrugs2 /usr/bin/mysql -uroot
 ```
 
 ## Getting the pandrugs tomcat log
-Take the running instance ID
 
 ```
-docker ps
-CONTAINER ID    IMAGE   COMMAND    CREATED      STATUS                          PORTS                   NAMES
-da903ab4c25d    pandrugs:latest     "/run.sh"   31 minutes ago  Up 31 minutes   0.0.0.0:8080->8080/tcp  jovial_hawking
-
-docker exec -it da903ab4c25d tail -f /pandrugsdb.log
+docker exec -it pandrugs2 tail -f /pandrugsdb.log
 ```
 
 ## Stopping the server
-Take the running instance ID
 
 ```
-docker ps
-CONTAINER ID    IMAGE   COMMAND    CREATED      STATUS                          PORTS                   NAMES
-da903ab4c25d    pandrugs:latest     "/run.sh"   31 minutes ago  Up 31 minutes   0.0.0.0:8080->8080/tcp  jovial_hawking
-
-docker stop da903ab4c25d
+docker stop pandrugs2
 ```
-
-

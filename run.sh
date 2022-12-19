@@ -5,20 +5,29 @@ if [[ ! -d $DATA_DIR/database ]]; then
     mkdir $DATA_DIR/database
 fi
 
-
 if [[ ! -d /var/run/mysqld ]]; then
     echo "=> Creating /var/run/mysql..."
     mkdir -p /var/run/mysqld
     chown mysql:mysql /var/run/mysqld
 fi
 
+docker images > /dev/null
+if [[ $? -gt 0 ]]; then
+    echo "=> It seems that Docker is not running, please fix it as soon as possible"
+else
+    PHARMCAT_IMAGE=$(cat /pandrugs-additional-scripts/pharmcat-pandrugs.sh  | grep -o -e "pgkb/.* ./" | head -1 | sed 's# ./##g')
+    echo "=> Pulling PharmCAT Docker image: ${PHARMCAT_IMAGE}"
+    docker pull ${PHARMCAT_IMAGE}
+    echo "=> Done!"
+fi
+
 if [[ ! -d $DATA_DIR/database/mysql ]]; then
     echo "=> An empty or uninitialized MySQL data directory is detected in $DATA_DIR/database"
     echo "=> Installing MySQL ..."
     mysqld --initialize-insecure > /dev/null 2>&1
-    echo "=> Done!"  
+    echo "=> Done!"
     #/create_mysql_admin_user.sh
-    
+
     echo "=> Starting MySQL for initial setup..."
     /usr/bin/mysqld_safe > /dev/null 2>&1 &
     RET=1
@@ -31,9 +40,9 @@ if [[ ! -d $DATA_DIR/database/mysql ]]; then
 
     echo "=> Running /mysql-setup.sh"
     /mysql-setup.sh
-    
+
     mysqladmin -uroot shutdown
-    
+
     echo "=> Done!"
 else
     echo "=> Using an existing data directory of MySQL"
