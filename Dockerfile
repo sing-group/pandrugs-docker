@@ -84,8 +84,11 @@ RUN mkdir /pandrugs-additional-scripts \
 	&& wget $PANDRUGS_ADDITIONAL_SCRIPTS_URL -O pandrugs-additional-scripts.zip \
 	&& unzip pandrugs-additional-scripts.zip -d /pandrugs-additional-scripts \
 	&& rm pandrugs-additional-scripts.zip \
-	&& chmod 755 /pandrugs-additional-scripts/* \
 	&& apt-get remove --purge -y wget unzip && apt-get clean
+
+ADD vep/scripts/run-pandrugs-vep-on-docker.sh /pandrugs-additional-scripts/run-pandrugs-vep-on-docker.sh
+ADD vep/scripts/run-pandrugs-vep-parser-on-docker.sh /pandrugs-additional-scripts/run-pandrugs-vep-parser-on-docker.sh
+RUN chmod 755 /pandrugs-additional-scripts/*
 
 ADD context.xml /opt/tomcat/webapps/${APP_NAME}/META-INF/context.xml
 RUN sed /opt/tomcat/webapps/${APP_NAME}/META-INF/context.xml -i -e 's#/tmp#'"${DATA_DIR}"'#g'

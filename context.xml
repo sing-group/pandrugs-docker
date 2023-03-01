@@ -65,9 +65,9 @@ License along with this program.  If not, see
 
         <Parameter name="user.data.directory" value="/pandrugs-backend_data" override = "false"/>
 
-        <Parameter name="vep.command.template" value="perl /vep/vep --format vcf --sift b --polyphen b --ccds --uniprot --hgvs --symbol --numbers --domains --regulatory --canonical --protein --biotype --uniprot --tsl --af --variant_class --xref_refseq --af_1kg --af_esp --af_gnomad --dir /vep/.vep  --config /vep/registry.local --plugin Condel,/vep/.vep/Plugins/config/Condel/config,b  --fork 8 --offline  --force_overwrite --vcf --no_progress  --fasta /vep/.vep/homo_sapiens/90_GRCh37/Homo_sapiens.GRCh37.75.dna.primary_assembly.fa --buffer_size 5  -i %1$s  --output_file %2$s" override = "false"/>
+        <Parameter name="vep.command.template" value="/pandrugs-additional-scripts/run-pandrugs-vep-on-docker.sh %1$s %2$s /opt/pandrugs2/vep-data" override = "false"/>
 
-        <Parameter name="veptovscore.command.template" value="perl /vep-parser/VEP_parser_v19_PD.pl -f=%1$s -o=%2$s -sp=%3$s -r=%3$s -p=cancer -tc=%3$s -c=no -v=FALSE -t=BOTH -d=/vep-parser/databases/" override = "false"/>
+        <Parameter name="veptovscore.command.template" value="/pandrugs-additional-scripts/run-pandrugs-vep-parser-on-docker.sh %1$s %2$s /opt/pandrugs2/vep-data/vep-parser" override = "false"/>
 
         <Parameter name="pharmcat.command.template.1" value="/pandrugs-additional-scripts/pharmcat-pandrugs.sh %1$s" override = "false"/>
 
