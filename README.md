@@ -2,7 +2,9 @@
 
 Version: 2021.04.27
 
-A Dockerfile to generate an all-in-one pandrugs server.
+A Dockerfile to generate an all-in-one PanDrugs server. 
+
+To be fully functional, this PanDrugs server requires an additional Docker image for running VEP. Check [this instructions](vep/README.md) to build and configure the image.
 
 ## Versions of PanDrugs components included in this image
 
@@ -30,7 +32,7 @@ A Dockerfile to generate an all-in-one pandrugs server.
 
 ## Building the image
 
-Edit the context.xml file in order to configure the mail system (see [SMTP Configuration Properties](http://connector.sourceforge.net/doc-files/Properties.html) for configuration details).
+Edit the `context.xml` file in order to configure the mail system (see [SMTP Configuration Properties](http://connector.sourceforge.net/doc-files/Properties.html) for configuration details).
 
 ```
 <Resource name="mail/session"

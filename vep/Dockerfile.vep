@@ -1,0 +1,23 @@
+FROM ensemblorg/ensembl-vep:release_109.3
+LABEL org.opencontainers.image.authors="hlfernandez@uvigo.es"
+
+ENV DEBIAN_FRONTEND noninteractive
+
+USER root
+
+RUN apt-get update && apt-get install -y wget unzip 
+
+USER vep
+
+RUN cd /opt/vep/src/ensembl-vep \
+    && perl INSTALL.pl -a a --NO_HTSLIB \
+    && perl INSTALL.pl -a cfp --PLUGINS CADD -c ./ -y GRCh38 -s homo_sapiens
+
+USER root
+
+RUN mkdir /opt/vep-parser \
+    && cd /opt/vep-parser \
+    && wget https://static.sing-group.org/pandrugs2/resources/2022.02.27-vep-parser_v20.zip --output-document=vep-parser.zip \
+    && unzip vep-parser.zip \
+    && rm vep-parser.zip \
+    && sed /opt/vep-parser/VEP_parser_v20_PD.pl -i -e 's#use lib "modules/";#use lib "/opt/vep-parser/modules";#g'

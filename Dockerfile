@@ -34,9 +34,6 @@ ENV TOMCAT_AJAX_VALVE https://maven.sing-group.org/repository/maven-releases/org
 ## PANDRUGS APP CONFIGS ##
 ENV PANDRUGS_BACKEND_URL https://static.sing-group.org/pandrugs/pandrugs-backend-${APP_BACKEND_VERSION}.war
 ENV PANDRUGS_FRONTEND_URL https://static.sing-group.org/pandrugs/pandrugs-frontend-${APP_FRONTEND_VERSION}.tar.gz
-ENV PANDRUGS_VEP_URL https://static.sing-group.org/pandrugs/pandrugsdb-variantanalysis-data/vep90.zip
-ENV VEP_PARSER_URL https://static.sing-group.org/pandrugs/pandrugsdb-variantanalysis-data/vep-parser-v19.zip
-ENV VEP_PARSER_MAIN_SCRIPT VEP_parser_v19_PD.pl
 ENV PANDRUGSDB_SCHEMA_SQL_URL https://static.sing-group.org/pandrugs/pandrugsdb-schema-${APP_DB_SCHEMA_VERSION}.sql.gz
 ENV PANDRUGSDB_DATA_SQL_URL https://static.sing-group.org/pandrugs/pandrugsdb-noschema-${APP_DB_DATA_VERSION}.sql.gz
 ENV PANDRUGS_ADDITIONAL_SCRIPTS_URL http://static.sing-group.org/pandrugs/additional-scripts-1.0.0.zip
@@ -46,21 +43,6 @@ ENV PANDRUGS_ADDITIONAL_SCRIPTS_URL http://static.sing-group.org/pandrugs/additi
 ENV TOMCAT_MAJOR 8
 ENV TOMCAT_VERSION 8.0.53
 ENV TOMCAT_TGZ_URL https://www.apache.org/dyn/closer.cgi?action=download&filename=tomcat/tomcat-${TOMCAT_MAJOR}/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz
-
-# Variant analysis databases and vep-parser
-RUN apt-get update && apt-get install -y wget unzip \
-	&& mkdir /vep-parser && wget $VEP_PARSER_URL -O vep-parser.zip \
-	&& unzip vep-parser.zip -d /vep-parser \
-	&& rm vep-parser.zip \
-	&& sed /vep-parser/$VEP_PARSER_MAIN_SCRIPT -i -e 's#use lib.*#use lib "/vep-parser/modules";#g' \
-	&& apt-get remove --purge -y wget unzip && apt-get clean
-
-RUN apt-get update && apt-get install -y wget unzip \
-	&& wget $PANDRUGS_VEP_URL -O vep.zip \
-	&& unzip vep.zip -d /vep \
-	&& sed /vep/.vep/Plugins/config/Condel/config/condel_SP.conf -i -e "s#condel\.dir.*#condel.dir='/vep/.vep/Plugins/config/Condel/'#g" \
-	&& rm vep.zip \
-	&& apt-get remove --purge -y wget unzip && apt-get clean
 
 # Supervisor
 ADD start-mysqld.sh /start-mysqld.sh
