@@ -15,7 +15,7 @@ RUN apt-get update \
 	&& apt-get install -y docker-ce
 
 ## CONFIGURATION OF TOMCAT+MYSQL FRAMEWORK ###
-ENV APP_NAME pandrugs-backend
+ENV APP_NAME pandrugs2-backend
 ENV APP_BACKEND_VERSION 1.1.8
 ENV APP_FRONTEND_VERSION 1.2.3
 ENV APP_DATABASE_VERSION 20180328

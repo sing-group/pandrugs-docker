@@ -55,7 +55,7 @@ This will take some time because the image will retrieve big files from internet
 ## Starting the server
 
 ```
-docker run -d -v /var/run/docker.sock:/var/run/docker.sock -v /tmp:/tmp -v [your_local_dir_for_data OR volume_name]:/pandrugs-backend_data -p 80:8080 --name pandrugs2 pandrugs2
+docker run -d -v /var/run/docker.sock:/var/run/docker.sock -v /tmp:/tmp -v [your_local_dir_for_data OR volume_name]:/pandrugs2-backend_data -p 80:8080 --name pandrugs2 pandrugs2
 ```
 This command will:
 - Make your server available via the port 80 at the container machine.
