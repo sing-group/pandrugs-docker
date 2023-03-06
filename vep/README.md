@@ -1,16 +1,18 @@
 # pandrugs2-vep
 
+The `pandrugs2-vep` Docker image contains an installation of [VEP](https://www.ensembl.org/info/docs/tools/vep/index.html) ready to be used with PanDrugs2.
+
 In order to build the `pandrugs2-vep` and make it functional, please follow these steps carefully:
 
-1. Create a directory named `/opt/pandrugs2/vep-data/`. This directory will be used to store the databases and files required by the `pandrugs2-vep` programs. If you create it in another location, please mind that you will need to add a third parameter to the `run-pandrugs-vep-*-on-docker.sh` scripts. 
+1. Create a directory named `/opt/pandrugs2/`. This directory will be used to store the databases and files required by the `pandrugs2-vep` programs. If you create it in another location, please mind that you will need to add a third parameter to the `run-pandrugs-vep-*-on-docker.sh` scripts. 
    
 2. Run `docker build ./ -f Dockerfile.vep -t pandrugs2-vep` to create the base Docker image.
 
-3. Run `download-vep-parser-data.sh /opt/pandrugs2/vep-data/` (or the path to the directory created in step 1). This script performs the following steps:
+3. Run `scripts/download-vep-parser-data.sh /opt/pandrugs2/` (or the path to the directory created in step 1). This script performs the following steps:
    
-   1. Download the CADD plugin files (whole_genome_SNVs.tsv.gz, whole_genome_SNVs.tsv.gz.tbi, InDels.tsv.gz and InDels.tsv.gz.tbi) into `/opt/pandrugs2/vep-data/.`
+   1. Download the [CADD](https://github.com/Ensembl/VEP_plugins/blob/release/109/CADD.pm) plugin files (`whole_genome_SNVs.tsv.gz`, `whole_genome_SNVs.tsv.gz.tbi`, `InDels.tsv.gz` and `InDels.tsv.gz.tbi`) into `/opt/pandrugs2/vep-data/.`
 
-   2. Copy the `ensembl-vep/homo_sapiens directory` from the `pandrugs2-vep` Docker image.
+   2. Copy the `ensembl-vep/homo_sapiens` directory from the `pandrugs2-vep` Docker image.
    
    3. Download the VEP parser databases into `/opt/pandrugs2/vep-data/vep-parser`.
 
@@ -73,7 +75,7 @@ After running these steps, you must:
 3 directories, 43 files
 ```
 
-And if you run `dh --max-depth=1 /opt/pandrugs2/vep-data/` you should obtain:
+And if you run `du -h --max-depth=1 /opt/pandrugs2/vep-data/` you should obtain:
 
 ```
 85G     /opt/pandrugs2/vep-data/homo_sapiens
@@ -83,12 +85,12 @@ And if you run `dh --max-depth=1 /opt/pandrugs2/vep-data/` you should obtain:
 
 ## Test data
 
-To check that the  `pandrugs2-vep` Docker image is working properly, you may run the following commands using the `test-data/TCGA-BF-A1PU-01A-11D-A19A-08_hg38` file:
+To check that the `pandrugs2-vep` Docker image is working properly, you may run the following commands using the `test-data/TCGA-BF-A1PU-01A-11D-A19A-08_hg38` file:
 
 ```
-scripts/run-pandrugs-vep-on-docker.sh $(pwd)/test-data/TCGA-BF-A1PU-01A-11D-A19A-08_hg38.vcf /tmp/test-vep/TCGA-BF-A1PU-01A-11D-A19A-08_hg38.vep.vcf.gz /opt/pandrugs2/vep-data/vep-parser
+scripts/run-pandrugs-vep-on-docker.sh $(pwd)/test-data/TCGA-BF-A1PU-01A-11D-A19A-08_hg38.vcf /tmp/test-vep/TCGA-BF-A1PU-01A-11D-A19A-08_hg38.vep.vcf.gz /opt/pandrugs2/vep-data
 
-scripts/run-pandrugs-vep-parser-on-docker.sh /tmp/test-vep/TCGA-BF-A1PU-01A-11D-A19A-08_hg38.vep.vcf.gz /tmp/test-vep/output-vep-parser /opt/pandrugs2/vep-data/vep-parser/vep-data
+scripts/run-pandrugs-vep-parser-on-docker.sh /tmp/test-vep/TCGA-BF-A1PU-01A-11D-A19A-08_hg38.vep.vcf.gz /tmp/test-vep/output-vep-parser /opt/pandrugs2/vep-data/vep-parser
 ```
 
 Note that the last parameters may be omitted if data is located at `/opt/pandrugs2/vep-data/vep-parser`.

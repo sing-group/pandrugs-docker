@@ -48,7 +48,7 @@ echo "[3/3] Extracting pandrugs2-vep Docker image data"
 
 DOCKER_IMAGE="pandrugs2-vep"
 
-if [ $(docker images | grep ${DOCKER_IMAGE} | wc -l) -eq 0 ]; then 
+if [ $(docker images | grep ${DOCKER_IMAGE} | wc -l) -eq 0 ]; then
     echo "[Error] The ${DOCKER_IMAGE} Docker image does not exist, please build it first using the given instructions"
     exit -1
 fi
