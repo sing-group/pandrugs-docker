@@ -36,7 +36,6 @@ ENV PANDRUGS_BACKEND_URL https://static.sing-group.org/pandrugs/pandrugs-backend
 ENV PANDRUGS_FRONTEND_URL https://static.sing-group.org/pandrugs/pandrugs-frontend-${APP_FRONTEND_VERSION}.tar.gz
 ENV PANDRUGSDB_SCHEMA_SQL_URL https://static.sing-group.org/pandrugs/pandrugsdb-schema-${APP_DB_SCHEMA_VERSION}.sql.gz
 ENV PANDRUGSDB_DATA_SQL_URL https://static.sing-group.org/pandrugs/pandrugsdb-noschema-${APP_DB_DATA_VERSION}.sql.gz
-ENV PANDRUGS_ADDITIONAL_SCRIPTS_URL http://static.sing-group.org/pandrugs/additional-scripts-1.0.0.zip
 ##########################
 
 # Tomcat
@@ -79,13 +78,9 @@ RUN apt-get update && apt-get install -y wget unzip \
 	&& rm pandrugs-frontend.tar.gz \
 	&& rm /opt/tomcat/webapps/${APP_NAME}.war
 
-# Additional bash scripts (PharmCAT and VCF preprocessing)
-RUN mkdir /pandrugs-additional-scripts \
-	&& wget $PANDRUGS_ADDITIONAL_SCRIPTS_URL -O pandrugs-additional-scripts.zip \
-	&& unzip pandrugs-additional-scripts.zip -d /pandrugs-additional-scripts \
-	&& rm pandrugs-additional-scripts.zip \
-	&& apt-get remove --purge -y wget unzip && apt-get clean
-
+# Additional bash scripts (VEP, VEP parser, PharmCAT and VCF preprocessing)
+ADD pandrugs-additional-scripts/check-and-preprocess-vcf.sh /pandrugs-additional-scripts/check-and-preprocess-vcf.sh
+ADD pandrugs-additional-scripts/pharmcat-pandrugs.sh /pandrugs-additional-scripts/pharmcat-pandrugs.sh
 ADD vep/scripts/run-pandrugs-vep-on-docker.sh /pandrugs-additional-scripts/run-pandrugs-vep-on-docker.sh
 ADD vep/scripts/run-pandrugs-vep-parser-on-docker.sh /pandrugs-additional-scripts/run-pandrugs-vep-parser-on-docker.sh
 RUN chmod 755 /pandrugs-additional-scripts/*

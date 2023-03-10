@@ -4,7 +4,10 @@ Version: 2021.04.27
 
 A Dockerfile to generate an all-in-one PanDrugs server. 
 
-To be fully functional, this PanDrugs server requires an additional Docker image for running VEP. Check [this instructions](vep/README.md) to build and configure the image.
+To be fully functional, this PanDrugs server requires:
+
+- An additional Docker image for running VEP. Check [this instructions](vep/README.md) to build and configure the image and see how
+- An additional Docker image for running PharmCat. The official image `pgkb/pharmcat:2.1.2` is used to run [the additional scripts](pandrugs-additional-scripts/README.md).
 
 ## Versions of PanDrugs components included in this image
 
