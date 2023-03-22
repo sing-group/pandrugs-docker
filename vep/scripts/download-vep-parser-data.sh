@@ -3,12 +3,12 @@
 function help() {
     echo "This scripts performs the following steps:"
     echo -e "\t1. Download the CADD plugin files (whole_genome_SNVs.tsv.gz, whole_genome_SNVs.tsv.gz.tbi, InDels.tsv.gz and InDels.tsv.gz.tbi) into /path/to/vep-data"
-    echo -e "\t2. Copy the ensembl-vep/homo_sapiens directory from the pandrugs2-vep Docker image. After moving it, the script tags the old image as pandrugs2-vep:original and commits the changes in pandrugs2-vep so that it does not longer contain that directory."
+    echo -e "\t2. Copy the ensembl-vep/homo_sapiens directory from the pandrugs2-vep Docker image."
     echo -e "\t3. Download the VEP parser databases into /path/to/vep-data/vep-parser"
 }
 
-if [ ! $# -eq 1 ]; then
-    echo -e "[Error] This script requires one argument, which is the path to the directory where the VEP and VEP parser data must be stored.\n"
+if [ ! $# -eq 2 ]; then
+    echo -e "[Error] This script requires two arguments, which are the path to the directory where the VEP and VEP parser data must be stored and the Docker image to be used.\n"
     help
     exit -1
 fi
@@ -19,6 +19,7 @@ if [ "$1" == "--help" ]; then
 fi
 
 VEP_DATA_DIR="${1}/vep-data"
+DOCKER_IMAGE="${2}"
 
 if [ -d "${VEP_DATA_DIR}" ]; then
     echo "[Error] ${VEP_DATA_DIR} already exists, delete it an run the script again"
@@ -45,8 +46,6 @@ wget https://krishna.gs.washington.edu/download/CADD/v1.5/GRCh38/InDels.tsv.gz
 wget https://krishna.gs.washington.edu/download/CADD/v1.5/GRCh38/InDels.tsv.gz.tbi
 
 echo "[3/3] Extracting pandrugs2-vep Docker image data"
-
-DOCKER_IMAGE="pandrugs2-vep"
 
 if [ $(docker images | grep ${DOCKER_IMAGE} | wc -l) -eq 0 ]; then
     echo "[Error] The ${DOCKER_IMAGE} Docker image does not exist, please build it first using the given instructions"

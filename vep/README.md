@@ -6,13 +6,13 @@ In order to build the `pandrugs2-vep` and make it functional, please follow thes
 
 1. Create a directory named `/opt/pandrugs2/`. This directory will be used to store the databases and files required by the `pandrugs2-vep` programs. If you create it in another location, please mind that you will need to add a third parameter to the `run-pandrugs-vep-*-on-docker.sh` scripts. 
    
-2. Run `docker build ./ -f Dockerfile.vep -t pandrugs2-vep` to create the base Docker image.
+2. Run `docker-compose build` to create the base Docker image.
 
-3. Run `scripts/download-vep-parser-data.sh /opt/pandrugs2/` (or the path to the directory created in step 1). This script performs the following steps:
+3. Run `scripts/download-vep-parser-data.sh /opt/pandrugs2/ pandrugs2-vep:vep_109.3_with_vep_parser_v20 bash` (or the path to the directory created in step 1). This script performs the following steps:
    
    1. Download the [CADD](https://github.com/Ensembl/VEP_plugins/blob/release/109/CADD.pm) plugin files (`whole_genome_SNVs.tsv.gz`, `whole_genome_SNVs.tsv.gz.tbi`, `InDels.tsv.gz` and `InDels.tsv.gz.tbi`) into `/opt/pandrugs2/vep-data/.`
 
-   2. Copy the `ensembl-vep/homo_sapiens` directory from the `pandrugs2-vep` Docker image.
+   2. Copy the `ensembl-vep/homo_sapiens` directory from the `pandrugs2-vep:vep_109.3_with_vep_parser_v20 bash` Docker image.
    
    3. Download the VEP parser databases into `/opt/pandrugs2/vep-data/vep-parser`.
 
@@ -20,7 +20,7 @@ In order to build the `pandrugs2-vep` and make it functional, please follow thes
 
 After running these steps, you must:
 
-- Have a Docker image named `pandrugs2-vep` that takes about 29GB.
+- Have a Docker image named `pandrugs2-vep:vep_109.3_with_vep_parser_v20` that takes about 29GB.
 - Have the following tree directory at `/opt/pandrugs2/vep-data/` (it takes 224GB):
 
 ```
