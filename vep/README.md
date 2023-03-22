@@ -8,11 +8,11 @@ In order to build the `pandrugs2-vep` and make it functional, please follow thes
    
 2. Run `docker-compose build` to create the base Docker image.
 
-3. Run `scripts/download-vep-parser-data.sh /opt/pandrugs2/ pandrugs2-vep:vep_109.3_with_vep_parser_v20 bash` (or the path to the directory created in step 1). This script performs the following steps:
+3. Run `scripts/download-vep-parser-data.sh /opt/pandrugs2/ pandrugs2-vep:vep_109.3_with_vep_parser_v20` (or the path to the directory created in step 1). This script performs the following steps:
    
    1. Download the [CADD](https://github.com/Ensembl/VEP_plugins/blob/release/109/CADD.pm) plugin files (`whole_genome_SNVs.tsv.gz`, `whole_genome_SNVs.tsv.gz.tbi`, `InDels.tsv.gz` and `InDels.tsv.gz.tbi`) into `/opt/pandrugs2/vep-data/.`
 
-   2. Copy the `ensembl-vep/homo_sapiens` directory from the `pandrugs2-vep:vep_109.3_with_vep_parser_v20 bash` Docker image.
+   2. Copy the `ensembl-vep/homo_sapiens` directory from the `pandrugs2-vep:vep_109.3_with_vep_parser_v20` Docker image.
    
    3. Download the VEP parser databases into `/opt/pandrugs2/vep-data/vep-parser`.
 
