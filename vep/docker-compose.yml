@@ -1,0 +1,12 @@
+version: "3.0"
+services:
+  pandrugs2-vep:
+    image: pandrugs2-vep:vep_109.3_with_vep_parser_v20
+    build:
+      context: ./
+      dockerfile: Dockerfile.vep
+  pandrugs2-vep-latest:
+    image: pandrugs2-vep
+    build:
+      context: ./
+      dockerfile: Dockerfile.vep
