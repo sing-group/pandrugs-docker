@@ -47,7 +47,8 @@ wget https://krishna.gs.washington.edu/download/CADD/v1.5/GRCh38/InDels.tsv.gz.t
 
 echo "[3/3] Extracting pandrugs2-vep Docker image data"
 
-if [ $(docker images | grep ${DOCKER_IMAGE} | wc -l) -eq 0 ]; then
+DOCKER_IMAGE_REGEX=$(echo ${DOCKER_IMAGE} | sed 's/:/[ ]*/g')
+if [ $(docker images | grep "${DOCKER_IMAGE_REGEX}" | wc -l) -eq 0 ]; then
     echo "[Error] The ${DOCKER_IMAGE} Docker image does not exist, please build it first using the given instructions"
     exit -1
 fi
