@@ -16,11 +16,10 @@ RUN apt-get update \
 
 ## CONFIGURATION OF TOMCAT+MYSQL FRAMEWORK ###
 ENV APP_NAME pandrugs2-backend
-ENV APP_BACKEND_VERSION 1.1.8
-ENV APP_FRONTEND_VERSION 1.2.3
-ENV APP_DATABASE_VERSION 20180328
-ENV APP_DB_SCHEMA_VERSION 20221119
-ENV APP_DB_DATA_VERSION 20210915
+ENV APP_BACKEND_VERSION latest
+ENV APP_FRONTEND_VERSION latest
+ENV APP_DB_SCHEMA_VERSION latest
+ENV APP_DB_DATA_VERSION latest
 ENV DB_NAME pandrugsdb
 ENV DB_USER pandrugsdb
 ENV DB_PASS pandrugsdb
@@ -32,10 +31,11 @@ ENV TOMCAT_AJAX_VALVE https://maven.sing-group.org/repository/maven-releases/org
 ###############################################
 
 ## PANDRUGS APP CONFIGS ##
-ENV PANDRUGS_BACKEND_URL https://static.sing-group.org/pandrugs/pandrugs-backend-${APP_BACKEND_VERSION}.war
-ENV PANDRUGS_FRONTEND_URL https://static.sing-group.org/pandrugs/pandrugs-frontend-${APP_FRONTEND_VERSION}.tar.gz
-ENV PANDRUGSDB_SCHEMA_SQL_URL https://static.sing-group.org/pandrugs/pandrugsdb-schema-${APP_DB_SCHEMA_VERSION}.sql.gz
-ENV PANDRUGSDB_DATA_SQL_URL https://static.sing-group.org/pandrugs/pandrugsdb-noschema-${APP_DB_DATA_VERSION}.sql.gz
+ENV PANDRUGS_BACKEND_URL https://static.sing-group.org/pandrugs2/pandrugs-backend-${APP_BACKEND_VERSION}.war
+ENV PANDRUGS_FRONTEND_URL https://static.sing-group.org/pandrugs2/pandrugs-frontend-${APP_FRONTEND_VERSION}.tar.gz
+ENV PANDRUGSDB_SCHEMA_SQL_URL https://static.sing-group.org/pandrugs2/pandrugsdb-schema-${APP_DB_SCHEMA_VERSION}.sql.gz
+ENV PANDRUGSDB_DATA_SQL_URL https://static.sing-group.org/pandrugs2/pandrugsdb-${APP_DB_DATA_VERSION}.sql.gz
+ENV VEP_DOCKER_IMAGE pandrugs2-vep:vep_109.3_with_vep_parser_v20
 ##########################
 
 # Tomcat
@@ -83,7 +83,9 @@ ADD pandrugs-additional-scripts/check-and-preprocess-vcf.sh /pandrugs-additional
 ADD pandrugs-additional-scripts/pharmcat-pandrugs.sh /pandrugs-additional-scripts/pharmcat-pandrugs.sh
 ADD vep/scripts/run-pandrugs-vep-on-docker.sh /pandrugs-additional-scripts/run-pandrugs-vep-on-docker.sh
 ADD vep/scripts/run-pandrugs-vep-parser-on-docker.sh /pandrugs-additional-scripts/run-pandrugs-vep-parser-on-docker.sh
-RUN chmod 755 /pandrugs-additional-scripts/*
+RUN chmod 755 /pandrugs-additional-scripts/* \
+	&& sed -i "s/pandrugs2-vep/${VEP_DOCKER_IMAGE}/g" /pandrugs-additional-scripts/run-pandrugs-vep-on-docker.sh \
+	&& sed -i "s/pandrugs2-vep/${VEP_DOCKER_IMAGE}/g" /pandrugs-additional-scripts/run-pandrugs-vep-parser-on-docker.sh
 
 ADD context.xml /opt/tomcat/webapps/${APP_NAME}/META-INF/context.xml
 RUN sed /opt/tomcat/webapps/${APP_NAME}/META-INF/context.xml -i -e 's#/tmp#'"${DATA_DIR}"'#g'
