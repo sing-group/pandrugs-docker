@@ -44,12 +44,12 @@ ENV TOMCAT_VERSION 8.0.53
 ENV TOMCAT_TGZ_URL https://www.apache.org/dyn/closer.cgi?action=download&filename=tomcat/tomcat-${TOMCAT_MAJOR}/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz
 
 # Supervisor
-ADD start-mysqld.sh /start-mysqld.sh
-ADD start-tomcat.sh /start-tomcat.sh
-ADD supervisord-mysqld.conf /etc/supervisor/conf.d/supervisord-mysqld.conf
-ADD supervisord-tomcat.conf /etc/supervisor/conf.d/supervisord-tomcat.conf
+ADD image-files/start-mysqld.sh /start-mysqld.sh
+ADD image-files/start-tomcat.sh /start-tomcat.sh
+ADD image-files/supervisord-mysqld.conf /etc/supervisor/conf.d/supervisord-mysqld.conf
+ADD image-files/supervisord-tomcat.conf /etc/supervisor/conf.d/supervisord-tomcat.conf
 
-ADD mysql-setup.sh /mysql-setup.sh
+ADD image-files/mysql-setup.sh /mysql-setup.sh
 
 # Install base software
 RUN apt-get update && apt-get install -y wget unzip \
@@ -87,11 +87,11 @@ RUN chmod 755 /pandrugs-additional-scripts/* \
 	&& sed -i "s/pandrugs2-vep/${VEP_DOCKER_IMAGE}/g" /pandrugs-additional-scripts/run-pandrugs-vep-on-docker.sh \
 	&& sed -i "s/pandrugs2-vep/${VEP_DOCKER_IMAGE}/g" /pandrugs-additional-scripts/run-pandrugs-vep-parser-on-docker.sh
 
-ADD context.xml /opt/tomcat/webapps/${APP_NAME}/META-INF/context.xml
+ADD image-files/context.xml /opt/tomcat/webapps/${APP_NAME}/META-INF/context.xml
 RUN sed /opt/tomcat/webapps/${APP_NAME}/META-INF/context.xml -i -e 's#/tmp#'"${DATA_DIR}"'#g'
 
 # Run script
-ADD run.sh /run.sh
+ADD image-files/run.sh /run.sh
 
 # Add volumes
 VOLUME $DATA_DIR
