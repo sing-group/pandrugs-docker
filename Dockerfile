@@ -57,6 +57,7 @@ RUN apt-get update && apt-get install -y wget unzip \
 	&& mkdir -p ${DATA_DIR}/database \
 	&& sed /etc/mysql/mysql.conf.d/mysqld.cnf -i -e 's#/var/lib/mysql#'"${DATA_DIR}"'/database#g' \
 	&& sed /etc/mysql/mysql.conf.d/mysqld.cnf -i -e 's/127\.0\.0\.1/0.0.0.0/g' \
+	&& sed /etc/mysql/mysql.conf.d/mysqld.cnf -i -e 's/max_allowed_packet.*/max_allowed_packet = 128M/g' \
 	&& chmod 755 /*.sh \
 	&& wget "$TOMCAT_TGZ_URL" -O /opt/tomcat.tar.gz \
 	&& mkdir /opt/tomcat \
