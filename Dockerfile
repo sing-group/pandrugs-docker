@@ -65,12 +65,10 @@ RUN apt-get update && apt-get install -y wget unzip \
 	&& rm /opt/tomcat.tar.gz \
 	&& wget $MYSQL_CONNECTOR_J_URL -O /opt/tomcat/lib/mysql-connector.jar && wget $MAIL_API_URL -O /opt/tomcat/lib/mail-api.jar && wget $ACTIVATION_URL -O /opt/tomcat/lib/activation.jar \
 	&& wget $TOMCAT_AJAX_VALVE -O /opt/tomcat/lib/tomcat-ajax-authenticate.jar \
-	&& echo 'export JAVA_OPTS="$JAVA_OPTS -Xss4M"' > /opt/tomcat/bin/setenv.sh \
-	&& apt-get remove --purge -y wget unzip && apt-get clean
+	&& echo 'export JAVA_OPTS="$JAVA_OPTS -Xss4M"' > /opt/tomcat/bin/setenv.sh
 
 # Install app
-RUN apt-get update && apt-get install -y wget unzip \
-	&& wget $PANDRUGS_BACKEND_URL -O /opt/tomcat/webapps/${APP_NAME}.war \
+RUN wget $PANDRUGS_BACKEND_URL -O /opt/tomcat/webapps/${APP_NAME}.war \
 	&& wget $PANDRUGS_FRONTEND_URL -O pandrugs-frontend.tar.gz \
 	&& mkdir /opt/tomcat/webapps/pandrugs \
 	&& tar -xzf pandrugs-frontend.tar.gz --directory /opt/tomcat/webapps/pandrugs \
