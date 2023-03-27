@@ -16,7 +16,7 @@ In order to build the `pandrugs2-vep` and make it functional, please follow thes
    
    3. Download the VEP parser databases into `/opt/pandrugs2/vep-data/vep-parser`.
 
-4. Create the following symbolic link in the host: `ln -s /var/lib/docker/volumes/pandrugs2-dev-data/_data /pandrugs2-backend_data`. This is because the Docker run commands (created in the `run-pandrugs-vep-*-on-docker.sh` scripts) will use references to directories inside `/pandrugs2-backend_data`. As these commands are executed in the host, such path must exist and point to the actual location of the data (which in this case is the location of the corresponding managed Docker volume).
+4. Create the following symbolic link in the host: `ln -s /var/lib/docker/volumes/pandrugs2-backend_data/_data /pandrugs2-backend_data` (replace `pandrugs2-backend_data` with the actual name of your Docker managed volume). This is because the Docker run commands (created in the `run-pandrugs-vep-*-on-docker.sh` scripts) will use references to directories inside `/pandrugs2-backend_data`. As these commands are executed in the host, such path must exist and point to the actual location of the data (which in this case is the location of the corresponding managed Docker volume).
 
 After running these steps, you must:
 

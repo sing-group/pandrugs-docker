@@ -76,7 +76,8 @@ RUN apt-get update && apt-get install -y wget unzip \
 	&& unzip /opt/tomcat/webapps/${APP_NAME}.war -d /opt/tomcat/webapps/${APP_NAME} \
 	&& mv /opt/tomcat/webapps/ROOT /opt/tomcat/webapps/ROOT.bak && ln -s /opt/tomcat/webapps/pandrugs /opt/tomcat/webapps/ROOT \
 	&& rm pandrugs-frontend.tar.gz \
-	&& rm /opt/tomcat/webapps/${APP_NAME}.war
+	&& rm /opt/tomcat/webapps/${APP_NAME}.war \
+	&& if [ ${APP_NAME} != "pandrugs-backend" ]; then ln -s /opt/tomcat/webapps/${APP_NAME} /opt/tomcat/webapps/pandrugs-backend; fi
 
 # Additional bash scripts (VEP, VEP parser, PharmCAT and VCF preprocessing)
 ADD pandrugs-additional-scripts/check-and-preprocess-vcf.sh /pandrugs-additional-scripts/check-and-preprocess-vcf.sh

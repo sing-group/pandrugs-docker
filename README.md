@@ -61,9 +61,12 @@ This will take some time because the image will retrieve big files from internet
 docker run -d -v /var/run/docker.sock:/var/run/docker.sock -v /tmp:/tmp -v [your_local_dir_for_data OR volume_name]:/pandrugs2-backend_data -p 80:8080 --name pandrugs2 pandrugs2
 ```
 This command will:
-- Make your server available via the port 80 at the container machine.
+- Make your server available via the port `80` at the container machine.
 - Allow the container executing Docker.
 - Share the host `/tmp` directory with the container.
+- Create a Docker managed volume named `pandrugs2-backend_data` if using `-v pandrugs2-backend_data:/pandrugs2-backend_data`
+
+As noted in the VEP configuration, create the following symbolic link in the host: `ln -s /var/lib/docker/volumes/pandrugs2-backend_data/_data /pandrugs2-backend_data` (replace `pandrugs2-backend_data` with the actual name of your Docker managed volume). This is because the Docker run commands (created in the `run-pandrugs-vep-*-on-docker.sh` scripts) will use references to directories inside `/pandrugs2-backend_data`. As these commands are executed in the host, such path must exist and point to the actual location of the data (which in this case is the location of the corresponding managed Docker volume).
 
 ## Accessing the server
 

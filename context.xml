@@ -63,7 +63,7 @@ License along with this program.  If not, see
                 />
         </Realm>
 
-        <Parameter name="user.data.directory" value="/pandrugs-backend_data" override = "false"/>
+        <Parameter name="user.data.directory" value="/pandrugs2-backend_data" override = "false"/>
 
         <Parameter name="vep.command.template" value="/pandrugs-additional-scripts/run-pandrugs-vep-on-docker.sh %1$s %2$s /opt/pandrugs2/vep-data" override = "false"/>
 
