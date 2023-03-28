@@ -1,37 +1,28 @@
-# pandrugsdb-docker
+# PanDrugs Docker ![release](https://img.shields.io/badge/latest-2023.03-green)
 
-Version: 2021.04.27
+A Dockerfile to generate an all-in-one [PanDrugs](pandrugs.org) server. 
 
-A Dockerfile to generate an all-in-one PanDrugs server. 
+Latest version available: `2023.03`
 
-To be fully functional, this PanDrugs server requires:
+## Requirements
+
+To be fully functional, in addition to building the `pandrugs2` Docker image as explained below, this PanDrugs server requires:
 
 - An additional Docker image for running VEP. Check [this instructions](vep/README.md) to build and configure the image and see how
 - An additional Docker image for running PharmCat. The official image `pgkb/pharmcat:2.1.2` is used to run [the additional scripts](pandrugs-additional-scripts/README.md).
 
 ## Versions of PanDrugs components included in this image
 
-* Front-end: 1.2.3
-* Back-end: 1.1.7
-* Perl variant analysis module: v19
-* Database: 20210427
+* Front-end: 2.0.0
+* Back-end: 2.0.0
+* Perl variant analysis module: [v20](https://github.com/cnio-bu/pandrugs-db)
+* Database: 20230314
+
+These versions are packed into the `2023.03` release.
 
 ## Versions of databases used by PanDrugs and included this image
 
-* DGIdb: 2020-Feb
-* moAb (from [Carter PJ & Lazar GA. Next generation antibody drugs: pursuit of the 'high-hanging fruit'. Nat Rev Drug Discov. 2017 Dec 1](https://doi.org/10.1038/nrd.2017.227))
-* TARGET database: v3
-* CTRP: v1
-* GDSC Results of data analysis (from [A landscape of pharmacogenomic interactions in cancer, Iorio F et al. Cell. 2016](https://doi.org/10.1016/j.cell.2016.06.017))
-* Variant Effect Predictor Ensembl: Release 90
-* COSMIC: Release v84 for HG19 assembly
-* Pfam: 31.0
-* UniProt: Release 2018_02
-* InterPro: 66.0
-* ClinVar: Release 2018_02
-* Cancer Gene Census for Cosmic: v84
-* APPRIS: (gencode19/ensembl74)
-* KEGG: Release 93.0
+The database sources can be found in the [`pandrugs-db` project](https://github.com/cnio-bu/pandrugs-db).
 
 ## Building the image
 
@@ -47,7 +38,17 @@ Edit the `context.xml` file in order to configure the mail system (see [SMTP Con
 />
 ```
 
-Inside the cloned repository:
+Note that the versions of the PanDrugs components are  are taken from the following environment variables declared in the Dockerfile:
+- `APP_BACKEND_VERSION`
+- `APP_FRONTEND_VERSION`
+- `APP_DB_SCHEMA_VERSION`
+- `APP_DB_DATA_VERSION`
+
+The available releases for these versions are:
+- `latest` (points to `2023.03`)
+- `2023.03`
+
+Then, inside the cloned repository:
 
 ```
 docker build -t pandrugs2 .
