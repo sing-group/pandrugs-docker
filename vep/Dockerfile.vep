@@ -1,5 +1,5 @@
 FROM ensemblorg/ensembl-vep:release_109.3
-LABEL org.opencontainers.image.authors="hlfernandez@uvigo.es"
+LABEL org.opencontainers.image.authors="hlfernandez@uvigo.gal"
 
 ENV DEBIAN_FRONTEND noninteractive
 

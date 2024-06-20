@@ -1,8 +1,8 @@
-# PanDrugs Docker ![release](https://img.shields.io/badge/latest-2023.03-green)
+# PanDrugs Docker ![release](https://img.shields.io/badge/latest-2024.05-green)
 
 A Dockerfile to generate an all-in-one [PanDrugs](pandrugs.org) server. 
 
-Latest version available: `2023.03`
+Latest version available: `2024.05`
 
 ## Requirements
 
@@ -13,12 +13,12 @@ To be fully functional, in addition to building the `pandrugs2` Docker image as 
 
 ## Versions of PanDrugs components included in this image
 
-* Front-end: 2.0.0
-* Back-end: 2.0.0
+* Front-end: 2.1.0
+* Back-end: 2.3.0
 * Perl variant analysis module: [v20](https://github.com/cnio-bu/pandrugs-db)
-* Database: 20230314
+* Database: 20240528
 
-These versions are packed into the `2023.03` release.
+These versions are packed into the `2024.05` release.
 
 ## Versions of databases used by PanDrugs and included this image
 
@@ -45,7 +45,8 @@ Note that the versions of the PanDrugs components are  are taken from the follow
 - `APP_DB_DATA_VERSION`
 
 The available releases for these versions are:
-- `latest` (points to `2023.03`)
+- `latest` (points to `2024.05`)
+- `2024.05`
 - `2023.03`
 
 Then, inside the cloned repository:
